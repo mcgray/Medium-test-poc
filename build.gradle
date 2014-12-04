@@ -1,0 +1,68 @@
+def javaProjects = [project(':IntegrationTests'),
+                    project(':ToDoService-Service'),
+                    project(':ToDoService-MediumTests'),
+                    project(':UserService-Common'),
+                    project(':UserService-Service'),
+                    project(':UserService-MediumTests')]
+def bootProjects = []
+
+
+
+
+buildscript {
+    ext {
+        springBootVersion = '1.1.8.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        maven { url "http://repo.spring.io/snapshot" }
+        maven { url "http://repo.spring.io/milestone" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+configure(allprojects) {
+    group = 'ua.com.mcgray'
+    version = '1.0-SNAPSHOT'
+
+
+}
+
+
+configure(javaProjects) {
+    apply plugin: 'idea'
+    apply plugin: 'java'
+    apply plugin: 'groovy'
+
+
+    ext.springVersion = "4.1.1.RELEASE"
+    ext.springBootVersion = "1.1.8.RELEASE"
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    repositories {
+        repositories {
+            mavenCentral()
+            mavenLocal()
+            maven { url "http://repo.spring.io/snapshot" }
+            maven { url "http://repo.spring.io/milestone" }
+        }
+    }
+
+    dependencies {
+        testCompile group: 'junit', name: 'junit', version: '4.11'
+        testCompile group: 'org.easytesting', name: 'fest-assert', version: '1.4'
+        testCompile group: 'org.mockito', name: 'mockito-core', version: '1.9.5'
+        testCompile 'org.codehaus.groovy:groovy-all:2.3.3'
+    }
+
+}
+
+task wrapper(type: Wrapper) {
+    description = "Generates gradlew[.bat] scripts"
+    gradleVersion = "2.1"
+}
+

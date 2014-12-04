@@ -1,0 +1,9 @@
+dependencies {
+
+    compile project(':UserService-Common')
+    compile project(':UserService-Service')
+
+    testCompile("org.springframework:spring-test:${springVersion}")
+
+
+}

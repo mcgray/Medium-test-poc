@@ -1,0 +1,9 @@
+include 'integration-tests', 'todo-service-service',
+        'todo-service-medium-tests', 'user-service-common',
+        'user-service-medium-tests', 'user-service-service'
+project(':integration-tests').name = 'IntegrationTests'
+project(':todo-service-service').name = 'ToDoService-Service'
+project(':todo-service-medium-tests').name = 'ToDoService-MediumTests'
+project(':user-service-common').name = 'UserService-Common'
+project(':user-service-service').name = 'UserService-Service'
+project(':user-service-medium-tests').name = 'UserService-MediumTests'
