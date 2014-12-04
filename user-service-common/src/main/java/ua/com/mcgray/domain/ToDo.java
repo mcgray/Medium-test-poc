@@ -1,6 +1,5 @@
 package ua.com.mcgray.domain;
 
-import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -12,7 +11,6 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.core.style.ToStringCreator;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * @author orezchykov
@@ -33,9 +31,6 @@ public class ToDo extends BaseEntity {
     private ToDoList list;
 
     private boolean done;
-
-    @DateTimeFormat(pattern = "yyyy/MM/dd")
-    private Date dueDate;
 
     @NotNull
     @Length(min = 1, max = 500)
@@ -58,14 +53,6 @@ public class ToDo extends BaseEntity {
 
     public void setDone(final boolean done) {
         this.done = done;
-    }
-
-    public Date getDueDate() {
-        return dueDate;
-    }
-
-    public void setDueDate(final Date dueDate) {
-        this.dueDate = dueDate;
     }
 
     public ToDoList getList() {
@@ -97,7 +84,6 @@ public class ToDo extends BaseEntity {
         return new HashCodeBuilder()
                 .appendSuper(super.hashCode())
                 .append(this.done)
-                .append(this.dueDate)
                 .append(this.title)
                 .append(this.note).toHashCode();
     }
@@ -113,7 +99,6 @@ public class ToDo extends BaseEntity {
         final ToDo other = (ToDo) obj;
         return new EqualsBuilder().appendSuper(super.equals(obj))
                 .append(this.done, other.done)
-                .append(this.dueDate, other.dueDate)
                 .append(this.title, other.title)
                 .append(this.note, other.note).isEquals();
     }
@@ -123,7 +108,6 @@ public class ToDo extends BaseEntity {
         return new ToStringCreator(this)
                 .append("id", this.getId())
                 .append("done", this.done)
-                .append("dueDate", this.dueDate)
                 .append("title", this.title)
                 .append("note", this.note).toString();
     }

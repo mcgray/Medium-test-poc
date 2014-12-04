@@ -16,7 +16,6 @@ DROP TABLE IF EXISTS `todo`;
 CREATE TABLE `todo` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `done` bit(1) NOT NULL,
-  `dueDate` datetime DEFAULT NULL,
   `note` longtext,
   `title` longtext NOT NULL,
   `todoshare_account_id` bigint(20) NOT NULL,

@@ -1,5 +1,7 @@
 package ua.com.mcgray.dto;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.springframework.core.style.ToStringCreator;
@@ -10,7 +12,7 @@ import ua.com.mcgray.domain.User;
  * @since 03.12.14
  */
 
-public class UserDto {
+public class UserDto implements Serializable {
 
     private Long id;
 

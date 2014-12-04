@@ -1,5 +1,9 @@
 apply plugin: 'spring-boot'
 
+ext {
+    querydslVersion    = "3.4.3"
+}
+
 jar {
     baseName = project.name
 }
@@ -32,6 +36,9 @@ dependencies {
     compile("org.springframework.boot:spring-boot-docs:${springBootVersion}")
     compile("org.springframework.data:spring-data-jpa:${springDataJpaVersion}")
     compile("org.springframework.data:spring-data-couchbase:1.2.0.RELEASE")
+
+    compile("com.mysema.querydsl:querydsl-core:${querydslVersion}")
+    compile("com.mysema.querydsl:querydsl-jpa:${querydslVersion}")
 
     compile('mysql:mysql-connector-mxj:5.0.12')
     compile('mysql:mysql-connector-mxj-db-files:5.0.12')

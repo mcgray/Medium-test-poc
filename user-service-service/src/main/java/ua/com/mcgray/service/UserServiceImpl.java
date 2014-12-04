@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
     public UserDto get(final Long userId) {
         User user = userRepository.findOne(userId);
         if (user == null) {
-            throw new UserServiceException("There is no user with such id");
+            throw new UserServiceException("There is no user with such id:" + userId);
         }
         return new UserDto(user);
     }

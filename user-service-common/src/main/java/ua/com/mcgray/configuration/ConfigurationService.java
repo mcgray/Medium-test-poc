@@ -16,4 +16,6 @@ public interface ConfigurationService {
     String getCouchbaseBucketName();
 
     String getCouchbaseBucketPassword();
+
+    String getUserServiceUrl();
 }

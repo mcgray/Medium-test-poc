@@ -3,6 +3,7 @@ package ua.com.mcgray.service;
 import java.util.List;
 
 import ua.com.mcgray.domain.ToDoDto;
+import ua.com.mcgray.exception.ToDoServiceException;
 
 /**
  * @author orezchykov
@@ -12,5 +13,5 @@ import ua.com.mcgray.domain.ToDoDto;
 public interface ToDoService {
 
 
-    List<ToDoDto> getByAccountId(final Long userId);
+    List<ToDoDto> getByAccountId(final Long userId) throws ToDoServiceException;
 }

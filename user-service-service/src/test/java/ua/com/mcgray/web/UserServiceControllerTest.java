@@ -39,7 +39,7 @@ public class UserServiceControllerTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(userServiceController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(userServiceController).alwaysDo(print()).build();
         user1 = new User();
         user1.setId(USER_ID);
 
@@ -53,7 +53,6 @@ public class UserServiceControllerTest {
         when(userService.getAll()).thenReturn(Arrays.asList(new UserDto(user1), new UserDto(user2)));
         mockMvc.perform(get("/api/users/")
                 .accept(MediaType.APPLICATION_JSON_VALUE))
-                .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.[0].id", new Object[]{}).value(1))
                 .andExpect(jsonPath("$.[1].id", new Object[]{}).value(2))
@@ -67,7 +66,6 @@ public class UserServiceControllerTest {
         when(userService.get(USER_ID)).thenReturn(new UserDto(user1));
         mockMvc.perform(get("/api/user/1")
                 .accept(MediaType.APPLICATION_JSON_VALUE))
-                .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.id", new Object[]{}).value(1))
                 .andExpect(status().isOk());
@@ -81,7 +79,6 @@ public class UserServiceControllerTest {
         when(userService.get(USER_ID)).thenThrow(new UserServiceException("There is no user with such id"));
         mockMvc.perform(get("/api/user/1")
                 .accept(MediaType.APPLICATION_JSON_VALUE))
-                .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest());
 
