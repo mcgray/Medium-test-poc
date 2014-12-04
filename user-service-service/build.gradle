@@ -9,6 +9,10 @@ configurations {
 
 }
 
+test {
+
+}
+
 mainClassName = "ua.com.mcgray.UserServiceApplication"
 
 dependencies {
@@ -30,7 +34,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-aop:${springBootVersion}")
 
     compile("org.springframework.boot:spring-boot-docs:${springBootVersion}")
-    compile("org.springframework.data:spring-data-jpa:1.6.0.RELEASE")
+    compile("org.springframework.data:spring-data-jpa:${springDataJpaVersion}")
 
     compile('mysql:mysql-connector-mxj:5.0.12')
     compile('mysql:mysql-connector-mxj-db-files:5.0.12')
@@ -54,7 +58,6 @@ dependencies {
     compile("mysql:mysql-connector-java")
 
     testCompile group: 'org.unitils', name: 'unitils-dbunit', version: '3.4.2'
-//    testCompile group: 'com.playtika.tests', name: 'mysql_utils', version: '1.0-SNAPSHOT'
 
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 }

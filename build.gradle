@@ -39,9 +39,18 @@ configure(javaProjects) {
 
     ext.springVersion = "4.1.1.RELEASE"
     ext.springBootVersion = "1.1.8.RELEASE"
+    ext.springDataJpaVersion = "1.7.1.RELEASE"
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
+
+    test {
+        useJUnit {
+            excludeCategories('ua.com.mcgray.test.MediumTest')
+        }
+        testLogging.showStandardStreams = true
+
+    }
 
     repositories {
         repositories {

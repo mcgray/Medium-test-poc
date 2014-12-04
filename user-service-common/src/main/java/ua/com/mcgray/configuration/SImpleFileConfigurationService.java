@@ -1,5 +1,8 @@
 package ua.com.mcgray.configuration;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -38,6 +41,21 @@ public class SimpleFileConfigurationService implements ConfigurationService {
         
         return dbConfiguration;
         
+    }
+
+    @Override
+    public List<String> getCouchbaseHosts() {
+        return Arrays.asList(environment.getProperty("couchbase.todo.hosts").split(","));
+    }
+
+    @Override
+    public String getCouchbaseBucketName() {
+        return environment.getProperty("couchbase.todo.bucket");
+    }
+
+    @Override
+    public String getCouchbaseBucketPassword() {
+        return environment.getProperty("couchbase.todo.password");
     }
 
 }

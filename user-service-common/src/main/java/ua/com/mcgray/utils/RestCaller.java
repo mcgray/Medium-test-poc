@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
  * @author orezchykov
  * @since 04.12.14
  */
+
 public class RestCaller {
 
     private final int port;

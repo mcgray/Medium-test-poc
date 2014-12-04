@@ -12,6 +12,7 @@ dependencies {
     compile("org.springframework:spring-aspects:${springVersion}")
     compile("org.springframework:spring-webmvc:${springVersion}")
     compile("org.springframework:spring-web:${springVersion}")
+    compile("org.springframework:spring-orm:${springVersion}")
 
 
 
@@ -23,5 +24,7 @@ dependencies {
 
 
     compile('commons-lang:commons-lang:2.6')
+
+    compile("org.apache.tomcat:tomcat-jdbc:7.0.54")
 
 }
