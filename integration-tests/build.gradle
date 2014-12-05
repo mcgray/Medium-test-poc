@@ -6,5 +6,6 @@ dependencies {
     compile project(':ToDoService-Service')
 
     testCompile ('org.spockframework:spock-core:0.7-groovy-2.0')
+    testCompile("com.jayway.jsonpath:json-path:0.9.1")
 
 }
