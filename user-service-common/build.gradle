@@ -56,6 +56,10 @@ dependencies {
 
     compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
 
+    compile('mysql:mysql-connector-mxj:5.0.12')
+    compile('mysql:mysql-connector-mxj-db-files:5.0.12')
+    compile('commons-io:commons-io:2.4')
+    compile('org.apache.mina:mina-core:1.1.6')
 
     compile("org.aspectj:aspectjrt:1.8.1")
     compile("org.aspectj:aspectjweaver:1.8.1")

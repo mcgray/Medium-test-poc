@@ -1,0 +1,21 @@
+task mediumTests(dependsOn: test, type: Test) {
+    useJUnit {
+        includeCategories('ua.com.mcgray.test.MediumTest')
+    }
+    testLogging.showStandardStreams = true
+
+    testLogging {
+        events "started", "passed", "skipped", "failed", "standardOut", "standardError"
+    }
+}
+
+dependencies {
+
+    compile project(':UserService-Common')
+    compile project(':ToDoService-Service')
+
+    testCompile("org.springframework:spring-test:${springVersion}")
+    testCompile("org.couchbase.mock:CouchbaseMock:0.8-SNAPSHOT")
+    testCompile("com.jayway.jsonpath:json-path:0.9.1")
+
+}

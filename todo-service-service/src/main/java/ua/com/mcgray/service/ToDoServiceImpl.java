@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import ua.com.mcgray.domain.ToDo;
 import ua.com.mcgray.domain.ToDoDto;
@@ -35,6 +36,7 @@ public class ToDoServiceImpl implements ToDoService {
     @Autowired
     private ToDoShareAccountRepository toDoShareAccountRepository;
 
+    @Cacheable("todo")
     @Override
     public List<ToDoDto> getByAccountId(final Long userId) {
         UserDto userDto;

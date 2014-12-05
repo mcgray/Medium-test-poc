@@ -58,4 +58,9 @@ public class SimpleFileConfigurationService implements ConfigurationService {
         return environment.getProperty("couchbase.todo.password");
     }
 
+    @Override
+    public String getUserServiceUrl() {
+        return environment.getProperty("service.user.url");
+    }
+
 }

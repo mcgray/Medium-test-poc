@@ -46,7 +46,7 @@ configure(javaProjects) {
 
     test {
         useJUnit {
-            excludeCategories('ua.com.mcgray.test.MediumTest')
+            excludeCategories('ua.com.mcgray.test.MediumTest', 'ua.com.mcgray.test.LargeTest')
         }
         testLogging.showStandardStreams = true
 
@@ -58,6 +58,7 @@ configure(javaProjects) {
             mavenLocal()
             maven { url "http://repo.spring.io/snapshot" }
             maven { url "http://repo.spring.io/milestone" }
+            maven { url "http://files.couchbase.com/maven2/" }
         }
     }
 
