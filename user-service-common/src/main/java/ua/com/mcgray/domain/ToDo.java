@@ -11,6 +11,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.core.style.ToStringCreator;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
 /**
  * @author orezchykov
@@ -19,7 +20,7 @@ import org.springframework.core.style.ToStringCreator;
 
 @Entity
 @Table(name = "todo")
-public class ToDo extends BaseEntity {
+public class ToDo extends AbstractPersistable<Long> {
 
     @NotNull
     @ManyToOne(optional = false)
@@ -77,6 +78,11 @@ public class ToDo extends BaseEntity {
 
     public void setNote(final String note) {
         this.note = note;
+    }
+
+    @Override
+    public void setId(final Long id) {
+        super.setId(id);
     }
 
     @Override

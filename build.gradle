@@ -3,15 +3,25 @@ def javaProjects = [project(':IntegrationTests'),
                     project(':ToDoService-MediumTests'),
                     project(':UserService-Common'),
                     project(':UserService-Service'),
-                    project(':UserService-MediumTests')]
-def bootProjects = []
+                    project(':UserService-MediumTests'),
+                    project(':AccountService-Service'),
+                    project(':AccountService-MediumTests')]
+
+def bootProjects = [project(':ToDoService-Service'),
+                    project(':UserService-Service'),
+                    project(':AccountService-Service')]
+
+
+def mediumTestProjects = [project(':ToDoService-MediumTests'),
+                          project(':UserService-MediumTests'),
+                          project(':AccountService-MediumTests')]
 
 
 
 
 buildscript {
     ext {
-        springBootVersion = '1.1.8.RELEASE'
+        springBootVersion = '1.2.1.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -37,9 +47,9 @@ configure(javaProjects) {
     apply plugin: 'groovy'
 
 
-    ext.springVersion = "4.1.1.RELEASE"
-    ext.springBootVersion = "1.1.8.RELEASE"
-    ext.springDataJpaVersion = "1.7.1.RELEASE"
+    ext.springVersion = "4.1.4.RELEASE"
+    ext.springBootVersion = "1.2.1.RELEASE"
+    ext.springDataJpaVersion = "1.7.2.RELEASE"
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
@@ -69,6 +79,87 @@ configure(javaProjects) {
         testCompile 'org.codehaus.groovy:groovy-all:2.3.3'
     }
 
+}
+
+configure(bootProjects) {
+    apply plugin: 'spring-boot'
+
+    jar {
+        baseName = project.name
+    }
+
+    ext {
+        querydslVersion    = "3.4.3"
+    }
+
+    configurations {
+        providedRuntime
+
+    }
+
+    dependencies {
+
+        compile project(":UserService-Common")
+
+        compile("org.springframework:spring-webmvc:${springVersion}")
+        compile("org.springframework:spring-core:${springVersion}")
+        compile("org.springframework:spring-web:${springVersion}")
+        compile("org.springframework:spring-aop:${springVersion}")
+        compile("org.springframework:spring-aspects:${springVersion}")
+        compile("org.springframework:spring-core:${springVersion}")
+        compile("org.springframework:spring-context:${springVersion}")
+        compile("org.springframework:spring-framework-bom:${springVersion}")
+
+        compile("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
+        compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+        compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
+        compile("org.springframework.boot:spring-boot-starter-aop:${springBootVersion}")
+
+        compile("org.springframework.boot:spring-boot-docs:${springBootVersion}")
+        compile("org.springframework.data:spring-data-jpa:${springDataJpaVersion}")
+
+        compile('com.google.code.gson:gson:2.3')
+        testCompile("com.h2database:h2:1.3.148")
+        testCompile("com.jayway.jsonpath:json-path:0.9.1")
+        testCompile("org.springframework:spring-test:${springVersion}")
+
+        compile('org.liquibase:liquibase-core:3.3.0')
+
+        compile("commons-dbcp:commons-dbcp:1.2.2")
+        compile('com.caucho:resin-hessian:4.0.23')
+
+        compile("org.apache.commons:commons-lang3:3.2.1")
+        compile("org.apache.commons:commons-collections4:4.0")
+        compile("org.apache.tomcat:tomcat-jdbc:7.0.54")
+        compile("mysql:mysql-connector-java")
+
+        testCompile ("org.unitils:unitils-dbunit:3.4.2") {
+            exclude group: 'org.hibernate'
+        }
+
+        providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+    }
+}
+
+configure(mediumTestProjects) {
+    task mediumTests(dependsOn: test, type: Test) {
+        useJUnit {
+            includeCategories('ua.com.mcgray.test.MediumTest')
+        }
+        testLogging.showStandardStreams = true
+
+        testLogging {
+            events "started", "passed", "skipped", "failed", "standardOut", "standardError"
+        }
+    }
+
+    dependencies {
+
+        compile project(':UserService-Common')
+
+        testCompile("org.springframework:spring-test:${springVersion}")
+        testCompile("com.jayway.jsonpath:json-path:0.9.1")
+    }
 }
 
 task wrapper(type: Wrapper) {

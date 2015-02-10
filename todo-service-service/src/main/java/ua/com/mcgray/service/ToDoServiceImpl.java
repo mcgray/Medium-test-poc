@@ -10,12 +10,10 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import ua.com.mcgray.domain.ToDo;
 import ua.com.mcgray.domain.ToDoDto;
-import ua.com.mcgray.domain.ToDoShareAccount;
-import ua.com.mcgray.dto.UserDto;
+import ua.com.mcgray.domain.ToDoShareAccountDto;
+import ua.com.mcgray.exception.AccountServiceException;
 import ua.com.mcgray.exception.ToDoServiceException;
-import ua.com.mcgray.exception.UserServiceException;
 import ua.com.mcgray.repository.ToDoRepository;
-import ua.com.mcgray.repository.ToDoShareAccountRepository;
 
 /**
  * @author orezchykov
@@ -28,30 +26,25 @@ public class ToDoServiceImpl implements ToDoService {
     private static Logger logger = LoggerFactory.getLogger(ToDoServiceImpl.class);
 
     @Autowired
-    private UserService userService;
+    private AccountService accountService;
 
     @Autowired
     private ToDoRepository toDoRepository;
 
-    @Autowired
-    private ToDoShareAccountRepository toDoShareAccountRepository;
-
     @Cacheable("todo")
     @Override
-    public List<ToDoDto> getByAccountId(final Long userId) {
-        UserDto userDto;
+    public List<ToDoDto> getByUserId(final Long userId) {
+        ToDoShareAccountDto toDoShareAccountDto;
         try {
-            userDto = userService.get(userId);
-        } catch (UserServiceException e) {
-            String msg = "There is no user with id: " + userId;
+            toDoShareAccountDto = accountService.getByUserId(userId);
+        } catch (AccountServiceException e) {
+            String msg = "There is no account for user with id: " + userId;
             logger.error(msg);
             throw new ToDoServiceException(msg, e);
+
         }
-        ToDoShareAccount toDoShareAccount = toDoShareAccountRepository.findOne(userDto.getToDoShareAccountId());
-        if (toDoShareAccount == null) {
-            throw new ToDoServiceException("There is no account with id:" + userDto.getToDoShareAccountId());
-        }
-        List<ToDo> toDos = toDoRepository.findByCreatedBy(toDoShareAccount);
+
+        List<ToDo> toDos = toDoRepository.findByCreatedById(toDoShareAccountDto.getId());
         return toDos.stream().map(ToDoDto::new).collect(Collectors.toList());
     }
 }

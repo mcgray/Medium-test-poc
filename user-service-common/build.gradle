@@ -50,6 +50,7 @@ dependencies {
     compile("org.springframework:spring-web:${springVersion}")
     compile("org.springframework:spring-orm:${springVersion}")
 
+    compile("org.springframework.data:spring-data-jpa:${springDataJpaVersion}")
     compile("com.mysema.querydsl:querydsl-core:${querydslVersion}")
     compile("com.mysema.querydsl:querydsl-jpa:${querydslVersion}")
     querydslapt  "com.mysema.querydsl:querydsl-apt:${querydslVersion}"

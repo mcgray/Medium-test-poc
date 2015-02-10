@@ -52,7 +52,7 @@ public class ToDoControllerTest {
         ToDo toDo2 = new ToDo();
         toDo2.setId(2L);
         toDo2.setTitle(TITLE2);
-        when(toDoService.getByAccountId(1L)).thenReturn(Arrays.asList(new ToDoDto(toDo1), new ToDoDto(toDo2)));
+        when(toDoService.getByUserId(1L)).thenReturn(Arrays.asList(new ToDoDto(toDo1), new ToDoDto(toDo2)));
 
         mockMvc.perform(get("/api/todo/1"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -60,14 +60,14 @@ public class ToDoControllerTest {
                 .andExpect(jsonPath("$.[1].title").value(TITLE2))
                 .andExpect(status().isOk());
 
-        verify(toDoService).getByAccountId(1L);
+        verify(toDoService).getByUserId(1L);
 
 
     }
 
     @Test
     public void shouldThrowExceptionIfThereIsNoUserOrAccount() throws Exception {
-        when(toDoService.getByAccountId(TODO_ID1)).thenThrow(ToDoServiceException.class);
+        when(toDoService.getByUserId(TODO_ID1)).thenThrow(ToDoServiceException.class);
 
         mockMvc.perform(get("/api/todo/1"))
                 .andExpect(status().isBadRequest());

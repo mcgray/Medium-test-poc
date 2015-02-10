@@ -3,7 +3,6 @@ package ua.com.mcgray.monitoring;
 import org.springframework.boot.actuate.metrics.CounterService;
 import org.springframework.boot.actuate.metrics.writer.Delta;
 import org.springframework.boot.actuate.metrics.writer.MetricWriter;
-import org.springframework.stereotype.Component;
 
 /**
  * @author orezchykov

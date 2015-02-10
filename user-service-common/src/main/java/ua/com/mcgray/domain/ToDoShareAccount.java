@@ -13,6 +13,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.core.style.ToStringCreator;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
 /**
  * @author orezchykov
@@ -20,7 +21,7 @@ import org.springframework.core.style.ToStringCreator;
  */
 @Entity
 @Table(name = "todoshare_account")
-public class ToDoShareAccount extends BaseEntity {
+public class ToDoShareAccount extends AbstractPersistable<Long> {
 
     @NotNull
     @Length(min = 6, max = 255)
@@ -86,6 +87,11 @@ public class ToDoShareAccount extends BaseEntity {
 
     public void setToDoLists(final Set<ToDoList> toDoLists) {
         this.toDoLists = toDoLists;
+    }
+
+    @Override
+    public void setId(final Long id) {
+        super.setId(id);
     }
 
     @Override

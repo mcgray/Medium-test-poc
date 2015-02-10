@@ -13,5 +13,5 @@ import ua.com.mcgray.exception.ToDoServiceException;
 public interface ToDoService {
 
 
-    List<ToDoDto> getByAccountId(final Long userId) throws ToDoServiceException;
+    List<ToDoDto> getByUserId(final Long userId) throws ToDoServiceException;
 }

@@ -63,4 +63,9 @@ public class SimpleFileConfigurationService implements ConfigurationService {
         return environment.getProperty("service.user.url");
     }
 
+    @Override
+    public String getAccountServiceUrl() {
+        return environment.getProperty("service.account.url");
+    }
+
 }

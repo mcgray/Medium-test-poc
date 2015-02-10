@@ -18,4 +18,6 @@ public interface ConfigurationService {
     String getCouchbaseBucketPassword();
 
     String getUserServiceUrl();
+
+    String getAccountServiceUrl();
 }

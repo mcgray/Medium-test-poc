@@ -33,7 +33,7 @@ public class ToDoController {
 
     @RequestMapping(value = "/todo/{userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ToDoDto> getToDoByAccount(@PathVariable Long userId) {
-        return toDoService.getByAccountId(userId);
+        return toDoService.getByUserId(userId);
     }
 
     @ExceptionHandler(ToDoServiceException.class)

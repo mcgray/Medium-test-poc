@@ -15,6 +15,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.core.style.ToStringCreator;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
 /**
  * @author orezchykov
@@ -23,7 +24,7 @@ import org.springframework.core.style.ToStringCreator;
 
 @Entity
 @Table(name = "todo_list")
-public class ToDoList extends BaseEntity {
+public class ToDoList extends AbstractPersistable<Long> {
 
     @NotNull
     @Length(min = 3, max = 255)

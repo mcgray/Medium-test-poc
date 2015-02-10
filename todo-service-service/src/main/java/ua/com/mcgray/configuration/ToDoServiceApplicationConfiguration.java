@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import ua.com.mcgray.service.UserService;
+import ua.com.mcgray.service.AccountService;
 
 /**
  * @author orezchykov
@@ -22,9 +22,9 @@ public class ToDoServiceApplicationConfiguration {
     private ConfigurationService configurationService;
 
     @Bean
-    public UserService userService() throws MalformedURLException {
+    public AccountService accountService() throws MalformedURLException {
         HessianProxyFactory hessianProxyFactory = new HessianProxyFactory();
-        return (UserService) hessianProxyFactory.create(UserService.class, configurationService.getUserServiceUrl());
+        return (AccountService) hessianProxyFactory.create(AccountService.class, configurationService.getAccountServiceUrl());
     }
 
 

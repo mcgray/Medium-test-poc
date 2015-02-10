@@ -16,4 +16,5 @@ public interface ToDoRepository extends JpaRepository<ToDo, Long>, QueryDslPredi
 
     List<ToDo> findByCreatedBy(ToDoShareAccount createdBy);
 
+    List<ToDo> findByCreatedById(Long toDoShareAccountId);
 }

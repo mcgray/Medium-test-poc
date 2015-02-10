@@ -11,6 +11,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.core.style.ToStringCreator;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
 /**
  * @author orezchykov
@@ -19,7 +20,7 @@ import org.springframework.core.style.ToStringCreator;
 
 @Entity
 @Table(name = "user")
-public class User extends BaseEntity {
+public class User extends AbstractPersistable<Long> {
 
     private static final long serialVersionUID = 4752412191180798770L;
 
@@ -71,6 +72,11 @@ public class User extends BaseEntity {
 
     public void setActive(final boolean active) {
         this.active = active;
+    }
+
+    @Override
+    public void setId(final Long id) {
+        super.setId(id);
     }
 
     @Override

@@ -28,12 +28,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import ua.com.mcgray.domain.ToDoDto;
 import ua.com.mcgray.domain.ToDoShareAccount;
-import ua.com.mcgray.domain.User;
-import ua.com.mcgray.dto.UserDto;
+import ua.com.mcgray.domain.ToDoShareAccountDto;
+import ua.com.mcgray.exception.AccountServiceException;
 import ua.com.mcgray.exception.ToDoServiceException;
-import ua.com.mcgray.exception.UserServiceException;
+import ua.com.mcgray.service.AccountService;
 import ua.com.mcgray.service.ToDoService;
-import ua.com.mcgray.service.UserService;
 import ua.com.mcgray.test.EmbeddedMysqlProvider;
 import ua.com.mcgray.test.MediumTest;
 import ua.com.mcgray.utils.EmbeddedCouchbaseProvider;
@@ -83,7 +82,7 @@ public class ToDoServiceApplicationTest {
         private CacheManager cacheManager;
 
         @Autowired
-        private UserService userService;
+        private AccountService accountService;
 
         private RestCaller restCaller;
 
@@ -107,7 +106,7 @@ public class ToDoServiceApplicationTest {
         @Test
         public void shouldGetToDoByUserIdHessian() throws Exception {
                 prepareUserService();
-                List<ToDoDto> toDoDtos = toDoService.getByAccountId(USER_ID);
+                List<ToDoDto> toDoDtos = toDoService.getByUserId(USER_ID);
 
                 assertThat(toDoDtos).isNotNull().hasSize(2);
                 assertThat(toDoDtos.get(0).getTitle()).isEqualTo("Admin personal ToDo");
@@ -116,21 +115,18 @@ public class ToDoServiceApplicationTest {
         }
 
         private void prepareUserService() {
-                User user = new User();
-                user.setId(USER_ID);
                 ToDoShareAccount toDoShareAccount = new ToDoShareAccount();
                 toDoShareAccount.setId(1L);
-                user.setToDoShareAccount(toDoShareAccount);
-                final UserDto userDto = new UserDto(user);
-                when(userService.get(USER_ID)).thenReturn(userDto);
+            final ToDoShareAccountDto toDoShareAccountDto = new ToDoShareAccountDto(toDoShareAccount);
+            when(accountService.getByUserId(USER_ID)).thenReturn(toDoShareAccountDto);
         }
 
         @Test
         public void shouldThrowToDoServiceExceptionHessian() throws Exception {
-                when(userService.get(USER_ID)).thenThrow(UserServiceException.class);
+                when(accountService.getByUserId(USER_ID)).thenThrow(AccountServiceException.class);
 
                 thrown.expect(ToDoServiceException.class);
-                toDoService.getByAccountId(USER_ID);
+                toDoService.getByUserId(USER_ID);
 
         }
 
@@ -148,7 +144,7 @@ public class ToDoServiceApplicationTest {
 
         @Test
         public void shouldThrowToDoServiceExceotionJson() throws Exception {
-                when(userService.get(123L)).thenThrow(UserServiceException.class);
+                when(accountService.getByUserId(123L)).thenThrow(AccountServiceException.class);
 
                 ResponseEntity<String> responseEntity = restCaller.queryApi(HttpMethod.GET, "/remoting/api/todo/123");
                 assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
@@ -160,8 +156,8 @@ public class ToDoServiceApplicationTest {
 
                 @Bean
                 @Primary
-                public UserService userService() {
-                        return Mockito.mock(UserService.class);
+                public AccountService accountService() {
+                        return Mockito.mock(AccountService.class);
                 }
 
         }

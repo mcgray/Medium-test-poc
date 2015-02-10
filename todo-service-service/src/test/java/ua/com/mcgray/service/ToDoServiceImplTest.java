@@ -13,12 +13,11 @@ import org.mockito.MockitoAnnotations;
 import ua.com.mcgray.domain.ToDo;
 import ua.com.mcgray.domain.ToDoDto;
 import ua.com.mcgray.domain.ToDoShareAccount;
+import ua.com.mcgray.domain.ToDoShareAccountDto;
 import ua.com.mcgray.domain.User;
-import ua.com.mcgray.dto.UserDto;
+import ua.com.mcgray.exception.AccountServiceException;
 import ua.com.mcgray.exception.ToDoServiceException;
-import ua.com.mcgray.exception.UserServiceException;
 import ua.com.mcgray.repository.ToDoRepository;
-import ua.com.mcgray.repository.ToDoShareAccountRepository;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
@@ -36,10 +35,7 @@ public class ToDoServiceImplTest {
     private ToDoRepository toDoRepository;
 
     @Mock
-    private ToDoShareAccountRepository toDoShareAccountRepository;
-
-    @Mock
-    private UserService userService;
+    private AccountService accountService;
 
     @InjectMocks
     private ToDoServiceImpl toDoService;
@@ -57,18 +53,17 @@ public class ToDoServiceImplTest {
         ToDoShareAccount toDoShareAccount = new ToDoShareAccount();
         toDoShareAccount.setId(TODOSHARE_ACCOUNT_ID);
         user.setToDoShareAccount(toDoShareAccount);
-        UserDto userDto = new UserDto(user);
-        when(userService.get(USER_ID)).thenReturn(userDto);
-        when(toDoShareAccountRepository.findOne(TODOSHARE_ACCOUNT_ID)).thenReturn(toDoShareAccount);
+        final ToDoShareAccountDto toDoShareAccountDto = new ToDoShareAccountDto(toDoShareAccount);
+        when(accountService.getByUserId(USER_ID)).thenReturn(toDoShareAccountDto);
         ToDo toDo1 = new ToDo();
         toDo1.setId(1L);
         toDo1.setTitle("Title1");
         ToDo toDo2 = new ToDo();
         toDo2.setId(2L);
         toDo2.setTitle("Title2");
-        when(toDoRepository.findByCreatedBy(toDoShareAccount)).thenReturn(Arrays.asList(toDo1, toDo2));
+        when(toDoRepository.findByCreatedById(toDoShareAccountDto.getId())).thenReturn(Arrays.asList(toDo1, toDo2));
 
-        List<ToDoDto> toDoDtos = toDoService.getByAccountId(USER_ID);
+        List<ToDoDto> toDoDtos = toDoService.getByUserId(USER_ID);
 
         assertThat(toDoDtos).isNotNull().hasSize(2);
         assertThat(toDoDtos.get(0).getTitle()).isEqualTo("Title1");
@@ -77,29 +72,13 @@ public class ToDoServiceImplTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenThereIsNoUser() throws Exception {
-        when(userService.get(USER_ID)).thenThrow(UserServiceException.class);
-
-        thrown.expect(ToDoServiceException.class);
-        thrown.expectCause(instanceOf(UserServiceException.class));
-
-        toDoService.getByAccountId(USER_ID);
-
-    }
-
-    @Test
     public void shouldThrowExceptionWhenThereIsNoAccount() throws Exception {
-        User user = new User();
-        user.setId(USER_ID);
-        ToDoShareAccount toDoShareAccount = new ToDoShareAccount();
-        toDoShareAccount.setId(TODOSHARE_ACCOUNT_ID);
-        user.setToDoShareAccount(toDoShareAccount);
-        UserDto userDto = new UserDto(user);
-        when(userService.get(USER_ID)).thenReturn(userDto);
-        when(toDoShareAccountRepository.findOne(TODOSHARE_ACCOUNT_ID)).thenReturn(null);
+        when(accountService.getByUserId(USER_ID)).thenThrow(AccountServiceException.class);
 
         thrown.expect(ToDoServiceException.class);
-        thrown.expectMessage("There is no account with id");
-        toDoService.getByAccountId(USER_ID);
+        thrown.expectCause(instanceOf(AccountServiceException.class));
+
+        toDoService.getByUserId(USER_ID);
+
     }
 }
