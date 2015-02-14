@@ -164,6 +164,6 @@ configure(mediumTestProjects) {
 
 task wrapper(type: Wrapper) {
     description = "Generates gradlew[.bat] scripts"
-    gradleVersion = "2.1"
+    gradleVersion = "2.2"
 }
 

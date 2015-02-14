@@ -21,6 +21,7 @@ public class DataSourceConfiguration {
     @Autowired
     private ConfigurationService configurationService;
 
+    @Primary
     @Bean
     public DataSource dataSource() {
         DbConfiguration dbConfiguration = configurationService.getDbConfiguration();

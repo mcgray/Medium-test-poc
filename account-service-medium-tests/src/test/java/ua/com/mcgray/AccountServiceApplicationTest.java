@@ -9,13 +9,12 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import ua.com.mcgray.domain.ToDoShareAccount;
 import ua.com.mcgray.domain.ToDoShareAccountDto;
 import ua.com.mcgray.domain.User;
@@ -41,8 +40,7 @@ import static org.mockito.Mockito.when;
         AccountServiceApplicationTest.Config.class
 
 })
-@WebAppConfiguration
-@IntegrationTest("server.port=0")
+@WebIntegrationTest("server.port=0")
 public class AccountServiceApplicationTest {
 
     static {

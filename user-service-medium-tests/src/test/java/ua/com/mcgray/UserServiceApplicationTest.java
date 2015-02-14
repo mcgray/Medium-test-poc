@@ -12,13 +12,12 @@ import org.junit.experimental.categories.Category;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import ua.com.mcgray.dto.UserDto;
 import ua.com.mcgray.exception.UserServiceException;
 import ua.com.mcgray.service.UserService;
@@ -34,8 +33,7 @@ import static org.fest.assertions.Assertions.assertThat;
      UserServiceApplication.class
 
 })
-@WebAppConfiguration
-@IntegrationTest("server.port=0")
+@WebIntegrationTest("server.port=0")
 public class UserServiceApplicationTest {
 
     static {

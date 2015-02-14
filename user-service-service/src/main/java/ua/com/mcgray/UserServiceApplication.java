@@ -12,13 +12,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.metrics.CounterService;
 import org.springframework.boot.actuate.metrics.GaugeService;
 import org.springframework.boot.actuate.metrics.writer.MetricWriter;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.remoting.caucho.HessianServiceExporter;
 import org.springframework.web.servlet.DispatcherServlet;
@@ -33,10 +31,8 @@ import ua.com.mcgray.service.UserService;
  * @since 01.12.14
  */
 
-@Configuration
-@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @EnableWebMvc
-@ComponentScan("ua.com.mcgray")
 @Import(UserServiceApplicationConfiguration.class)
 public class UserServiceApplication implements ServletContextInitializer {
 

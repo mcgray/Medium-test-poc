@@ -15,8 +15,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +25,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import ua.com.mcgray.domain.ToDoDto;
 import ua.com.mcgray.domain.ToDoShareAccount;
 import ua.com.mcgray.domain.ToDoShareAccountDto;
@@ -52,8 +51,7 @@ import static org.mockito.Mockito.when;
         ToDoServiceApplication.class,
         ToDoServiceApplicationTest.Config.class
 })
-@WebAppConfiguration
-@IntegrationTest("server.port=0")
+@WebIntegrationTest("server.port=0")
 public class ToDoServiceApplicationTest {
 
         static {
