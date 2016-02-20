@@ -5,11 +5,17 @@ def javaProjects = [project(':IntegrationTests'),
                     project(':UserService-Service'),
                     project(':UserService-MediumTests'),
                     project(':AccountService-Service'),
-                    project(':AccountService-MediumTests')]
+                    project(':AccountService-MediumTests'),
+                    project(':Eureka-Server')]
 
 def bootProjects = [project(':ToDoService-Service'),
                     project(':UserService-Service'),
-                    project(':AccountService-Service')]
+                    project(':AccountService-Service'),
+                    project(':Eureka-Server')]
+
+def servicesProjects = [project(':ToDoService-Service'),
+                        project(':UserService-Service'),
+                        project(':AccountService-Service')]
 
 
 def mediumTestProjects = [project(':ToDoService-MediumTests'),
@@ -21,7 +27,7 @@ def mediumTestProjects = [project(':ToDoService-MediumTests'),
 
 buildscript {
     ext {
-        springBootVersion = '1.2.1.RELEASE'
+        springBootVersion = '1.3.2.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -29,6 +35,7 @@ buildscript {
         maven { url "http://repo.spring.io/milestone" }
     }
     dependencies {
+        classpath "io.spring.gradle:dependency-management-plugin:0.5.2.RELEASE"
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
 }
@@ -42,14 +49,15 @@ configure(allprojects) {
 
 
 configure(javaProjects) {
+    apply plugin: "io.spring.dependency-management"
     apply plugin: 'idea'
     apply plugin: 'java'
     apply plugin: 'groovy'
 
 
-    ext.springVersion = "4.1.4.RELEASE"
-    ext.springBootVersion = "1.2.1.RELEASE"
-    ext.springDataJpaVersion = "1.7.2.RELEASE"
+    ext.springVersion = "4.2.4.RELEASE"
+    ext.springBootVersion = "1.3.2.RELEASE"
+    ext.springDataJpaVersion = "1.9.2.RELEASE"
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
@@ -62,6 +70,13 @@ configure(javaProjects) {
 
     }
 
+    dependencyManagement {
+        imports {
+            mavenBom 'org.springframework.cloud:spring-cloud-starter-parent:1.0.0.RELEASE'
+            mavenBom 'org.springframework.cloud:spring-cloud-netflix:1.1.0.BUILD-SNAPSHOT'
+        }
+    }
+
     repositories {
         repositories {
             mavenCentral()
@@ -69,10 +84,14 @@ configure(javaProjects) {
             maven { url "http://repo.spring.io/snapshot" }
             maven { url "http://repo.spring.io/milestone" }
             maven { url "http://files.couchbase.com/maven2/" }
+            maven { url "http://caucho.com/m2/" }
         }
     }
 
     dependencies {
+        compile 'org.springframework.cloud:spring-cloud-starter-eureka'
+        compile 'org.springframework.cloud:spring-cloud-starter-feign'
+
         testCompile group: 'junit', name: 'junit', version: '4.11'
         testCompile group: 'org.easytesting', name: 'fest-assert', version: '1.4'
         testCompile group: 'org.mockito', name: 'mockito-core', version: '1.9.5'
@@ -89,7 +108,7 @@ configure(bootProjects) {
     }
 
     ext {
-        querydslVersion    = "3.4.3"
+        querydslVersion    = "3.7.1"
     }
 
     configurations {
@@ -98,8 +117,6 @@ configure(bootProjects) {
     }
 
     dependencies {
-
-        compile project(":UserService-Common")
 
         compile("org.springframework:spring-webmvc:${springVersion}")
         compile("org.springframework:spring-core:${springVersion}")
@@ -141,6 +158,12 @@ configure(bootProjects) {
     }
 }
 
+configure(servicesProjects) {
+    dependencies {
+        compile project(":UserService-Common")
+    }
+}
+
 configure(mediumTestProjects) {
     task mediumTests(dependsOn: test, type: Test) {
         useJUnit {
@@ -164,6 +187,6 @@ configure(mediumTestProjects) {
 
 task wrapper(type: Wrapper) {
     description = "Generates gradlew[.bat] scripts"
-    gradleVersion = "2.2"
+    gradleVersion = "2.10"
 }
 

@@ -36,7 +36,7 @@ public class ToDoServiceImpl implements ToDoService {
     public List<ToDoDto> getByUserId(final Long userId) {
         ToDoShareAccountDto toDoShareAccountDto;
         try {
-            toDoShareAccountDto = accountService.getByUserId(userId);
+            toDoShareAccountDto = accountService.getAccountByUserId(userId);
         } catch (AccountServiceException e) {
             String msg = "There is no account for user with id: " + userId;
             logger.error(msg);

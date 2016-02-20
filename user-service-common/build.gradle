@@ -1,6 +1,6 @@
 ext {
     generatedSourcesDir = file("${buildDir}/generated-sources")
-    querydslVersion    = "3.4.3"
+    querydslVersion    = "3.7.1"
 }
 
 sourceSets {

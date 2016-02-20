@@ -13,9 +13,10 @@ import ua.com.mcgray.repository.UserRepository;
 /**
  * @author orezchykov
  * @since 03.12.14
+ *
  */
 
-@Service
+@Service("localUserService")
 public class UserServiceImpl implements UserService {
 
     @Autowired

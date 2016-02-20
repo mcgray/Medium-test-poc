@@ -23,7 +23,6 @@ import ua.com.mcgray.service.ToDoService;
  */
 
 @RestController
-@RequestMapping("/api")
 public class ToDoController {
 
     private static Logger logger = LoggerFactory.getLogger(ToDoController.class);

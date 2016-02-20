@@ -7,6 +7,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 import ua.com.mcgray.test.LargeTest
 import ua.com.mcgray.utils.RestCaller
+
 /**
  * @author orezchykov
  * @since 05.12.14
@@ -18,13 +19,13 @@ class ToDoServiceTest extends Specification {
     @Shared
     def restCaller = new RestCaller(8800, "todoService")
 
-    def "should get a list of ToDos by user Id using a Hessian call"() {
+    def "should get a list of ToDos by user Id using a Rest call"() {
         given: "user id equals 1"
             def userId = 1
 
         when:  "I call ToDO service"
 
-            def result = restCaller.queryApi(HttpMethod.GET, "/remoting/api/todo/" + userId)
+            def result = restCaller.queryApi(HttpMethod.GET, "/todo/" + userId)
 
         then: "then I get the ToDo list for the user"
         assert result
@@ -42,7 +43,7 @@ class ToDoServiceTest extends Specification {
 
         when: "I call ToDo Service"
 
-            def result = restCaller.queryApi(HttpMethod.GET, "/remoting/api/todo/" + userId)
+            def result = restCaller.queryApi(HttpMethod.GET, "/todo/" + userId)
 
         then: "then I get the exception"
 

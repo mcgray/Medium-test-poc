@@ -51,7 +51,7 @@ public class UserServiceControllerTest {
         user2.setId(2L);
 
         when(userService.getAll()).thenReturn(Arrays.asList(new UserDto(user1), new UserDto(user2)));
-        mockMvc.perform(get("/api/users/")
+        mockMvc.perform(get("/users/")
                 .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.[0].id", new Object[]{}).value(1))
@@ -64,7 +64,7 @@ public class UserServiceControllerTest {
     @Test
     public void shouldGetUser() throws Exception {
         when(userService.get(USER_ID)).thenReturn(new UserDto(user1));
-        mockMvc.perform(get("/api/user/1")
+        mockMvc.perform(get("/user/1")
                 .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.id", new Object[]{}).value(1))
@@ -77,7 +77,7 @@ public class UserServiceControllerTest {
     @Test
     public void shouldReturnStatusWhenUserServiceExceptionIsThrown() throws Exception {
         when(userService.get(USER_ID)).thenThrow(new UserServiceException("There is no user with such id"));
-        mockMvc.perform(get("/api/user/1")
+        mockMvc.perform(get("/user/1")
                 .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest());

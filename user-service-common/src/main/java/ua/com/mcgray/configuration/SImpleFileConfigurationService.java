@@ -1,15 +1,10 @@
 package ua.com.mcgray.configuration;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
-import javax.annotation.PostConstruct;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import com.netflix.config.DynamicPropertyFactory;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ResourceLoader;
 
 /**
  * @author orezchykov
@@ -17,73 +12,63 @@ import org.springframework.core.io.ResourceLoader;
  */
 
 @Configuration
-//@PropertySource("file:/etc/mcgray/configuration.properties")
-//@PropertySource("classpath:configuration.properties")
-public class SimpleFileConfigurationService implements ConfigurationService {
+public class SimpleFileConfigurationService implements ConfigurationService  {
 
-    @Value("${config.location}")
-    private String configLocation;
-
-    @Autowired
-    private ResourceLoader resourceLoader;
-
-    private Properties properties;
-
-    @PostConstruct
-    protected void loadProperties() {
-        try {
-            properties = new Properties();
-            properties.load(resourceLoader.getResource(configLocation).getInputStream());
-        } catch (IOException e) {
-            throw new IllegalStateException("Can't find services.properties", e);
-        }
-    }
-
+//    @Autowired
+//    private DiscoveryClient discoveryClient;
 
     @Override
     public DbConfiguration getDbConfiguration() {
 
         DbConfiguration dbConfiguration = new DbConfiguration();
 
-        dbConfiguration.setDriverClassName(properties.getProperty("db.general.driverclassname"));
-        dbConfiguration.setMaxActive(Integer.parseInt(properties.getProperty("db.general.maxactive")));
-        dbConfiguration.setMinIdle(Integer.parseInt(properties.getProperty("db.general.minidle")));
-        dbConfiguration.setMaxIdle(Integer.parseInt(properties.getProperty("db.general.maxidle")));
-        dbConfiguration.setMaxWait(Integer.parseInt(properties.getProperty("db.general.maxwait")));
-        dbConfiguration.setValidationQuery(properties.getProperty("db.general.validationquery"));
-        dbConfiguration.setTestOnBorrow(Boolean.parseBoolean(properties.getProperty("db.general.testonborrow")));
-        dbConfiguration.setTestWhileIdle(Boolean.parseBoolean(properties.getProperty("db.general.testwhileidle")));
-        dbConfiguration.setUrl(properties.getProperty("db.user.url"));
-        dbConfiguration.setUser(properties.getProperty("db.user.user"));
-        dbConfiguration.setPassword(properties.getProperty("db.user.password"));
-        
+        dbConfiguration.setDriverClassName(DynamicPropertyFactory.getInstance().getStringProperty("db.general.driverclassname", "").get());
+        dbConfiguration.setMaxActive(DynamicPropertyFactory.getInstance().getIntProperty("db.general.maxactive", 0).get());
+        dbConfiguration.setMinIdle(DynamicPropertyFactory.getInstance().getIntProperty("db.general.minidle", 0).get());
+        dbConfiguration.setMaxIdle(DynamicPropertyFactory.getInstance().getIntProperty("db.general.maxidle", 0).get());
+        dbConfiguration.setMaxWait(DynamicPropertyFactory.getInstance().getIntProperty("db.general.maxwait", 0).get());
+        dbConfiguration.setValidationQuery(DynamicPropertyFactory.getInstance().getStringProperty("db.general.validationquery", "").get());
+        dbConfiguration.setTestOnBorrow(DynamicPropertyFactory.getInstance().getBooleanProperty("db.general.testonborrow", false).get());
+        dbConfiguration.setTestWhileIdle(DynamicPropertyFactory.getInstance().getBooleanProperty("db.general.testwhileidle", false).get());
+        dbConfiguration.setUrl(DynamicPropertyFactory.getInstance().getStringProperty("db.user.url", "").get());
+        dbConfiguration.setUser(DynamicPropertyFactory.getInstance().getStringProperty("db.user.user", "").get());
+        dbConfiguration.setPassword(DynamicPropertyFactory.getInstance().getStringProperty("db.user.password", "").get());
         return dbConfiguration;
         
     }
 
     @Override
     public List<String> getCouchbaseHosts() {
-        return Arrays.asList(properties.getProperty("couchbase.todo.hosts").split(","));
+        return Arrays.asList(DynamicPropertyFactory.getInstance().getStringProperty("couchbase.todo.hosts", "").get().split(","));
     }
 
     @Override
     public String getCouchbaseBucketName() {
-        return properties.getProperty("couchbase.todo.bucket");
+        return DynamicPropertyFactory.getInstance().getStringProperty("couchbase.todo.bucket", "").get();
     }
 
     @Override
     public String getCouchbaseBucketPassword() {
-        return properties.getProperty("couchbase.todo.password");
+        return DynamicPropertyFactory.getInstance().getStringProperty("couchbase.todo.password", "").get();
     }
 
-    @Override
-    public String getUserServiceUrl() {
-        return properties.getProperty("service.user.url");
-    }
+//    @Override
+//    public String getUserServiceUrl() {
+//        List<ServiceInstance> instances = discoveryClient.getInstances("user-service");
+//        if (instances != null && !instances.isEmpty()) {
+//            return instances.get(0).getUri().toString();
+//        }
+//        return null;
+//    }
+//
+//    @Override
+//    public String getAccountServiceUrl() {
+//        List<ServiceInstance> instances = discoveryClient.getInstances("account-service");
+//        if (instances != null && !instances.isEmpty()) {
+//            return instances.get(0).getUri().toString();
+//        }
+//        return null;
+//    }
 
-    @Override
-    public String getAccountServiceUrl() {
-        return properties.getProperty("service.account.url");
-    }
 
 }

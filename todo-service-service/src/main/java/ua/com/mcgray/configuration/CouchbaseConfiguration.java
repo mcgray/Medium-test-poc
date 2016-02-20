@@ -11,7 +11,7 @@ import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
  * @since 04.12.14
  */
 @Configuration
-public class CouchbaseConfiguration extends AbstractCouchbaseConfiguration{
+public class CouchbaseConfiguration extends AbstractCouchbaseConfiguration {
 
     @Autowired
     private ConfigurationService configurationService;

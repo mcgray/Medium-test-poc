@@ -56,7 +56,7 @@ public class AccountServiceImplTest {
 
         when(userService.get(USER_ID)).thenReturn(userDto);
         when(toDoShareAccountRepository.findOne(TODOSHARE_ACCOUNT_ID)).thenReturn(toDoShareAccount);
-        ToDoShareAccountDto account = accountService.getByUserId(USER_ID);
+        ToDoShareAccountDto account = accountService.getAccountByUserId(USER_ID);
 
         assertThat(account).isEqualTo(toDoShareAccountDto);
 
@@ -67,7 +67,7 @@ public class AccountServiceImplTest {
     public void shouldThrowAseWhenUserIdIsNull() throws Exception {
         thrown.expect(AccountServiceException.class);
         thrown.expectMessage("cannot be null");
-        accountService.getByUserId(null);
+        accountService.getAccountByUserId(null);
 
     }
 
@@ -76,8 +76,8 @@ public class AccountServiceImplTest {
         thrown.expect(AccountServiceException.class);
         thrown.expectMessage("There is no user with id");
         thrown.expectCause(instanceOf(UserServiceException.class));
-        when(userService.get(USER_ID)).thenThrow(UserServiceException.class);
-        accountService.getByUserId(USER_ID);
+        when(userService.get(USER_ID)).thenThrow(new UserServiceException("Something went wrong!"));
+        accountService.getAccountByUserId(USER_ID);
 
     }
 
@@ -87,6 +87,6 @@ public class AccountServiceImplTest {
         when(toDoShareAccountRepository.findOne(TODOSHARE_ACCOUNT_ID)).thenReturn(null);
         thrown.expect(AccountServiceException.class);
         thrown.expectMessage("There is no account with id");
-        accountService.getByUserId(USER_ID);
+        accountService.getAccountByUserId(USER_ID);
     }
 }

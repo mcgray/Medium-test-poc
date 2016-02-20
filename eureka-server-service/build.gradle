@@ -1,0 +1,6 @@
+//mainClassName = "ua.com.mcgray.AccountServiceApplication"
+
+
+dependencies {
+    compile 'org.springframework.cloud:spring-cloud-starter-eureka-server'
+}

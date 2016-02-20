@@ -1,7 +1,7 @@
-mainClassName = "ua.com.mcgray.ToDoServiceApplication"
+//mainClassName = "ua.com.mcgray.ToDoServiceApplication"
 
 dependencies {
 
-    compile("org.springframework.data:spring-data-couchbase:1.2.0.RELEASE")
+    compile("org.springframework.data:spring-data-couchbase:1.4.2.RELEASE")
 
 }

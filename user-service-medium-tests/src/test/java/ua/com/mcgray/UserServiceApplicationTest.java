@@ -1,8 +1,5 @@
 package ua.com.mcgray;
 
-import java.util.List;
-
-import com.caucho.hessian.client.HessianProxyFactory;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.ReadContext;
 import org.junit.Before;
@@ -18,8 +15,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import ua.com.mcgray.dto.UserDto;
-import ua.com.mcgray.exception.UserServiceException;
 import ua.com.mcgray.service.UserService;
 import ua.com.mcgray.test.EmbeddedMysqlProvider;
 import ua.com.mcgray.test.MediumTest;
@@ -59,39 +54,12 @@ public class UserServiceApplicationTest {
     @Before
     public void setUp() throws Exception {
         restCaller = new RestCaller(port, contextPath);
-        HessianProxyFactory hessianProxyFactory = new HessianProxyFactory();
-        userService = (UserService) hessianProxyFactory.create(UserService.class,
-                "http://localhost:" + port + contextPath + "/remoting/UserService");
-
-    }
-
-    @Test
-    public void shouldGetAllUsersHessian() throws Exception {
-        List<UserDto> userDtos = userService.getAll();
-        assertThat(userDtos).isNotNull().hasSize(2);
-        assertThat(userDtos.get(0).getId()).isEqualTo(1);
-        assertThat(userDtos.get(1).getId()).isEqualTo(2);
-
-    }
-
-    @Test
-    public void shouldGetUserHessian() throws Exception {
-        UserDto userDto = userService.get(USER_ID);
-        assertThat(userDto).isNotNull();
-        assertThat(userDto.getId()).isEqualTo(USER_ID);
-
-    }
-
-    @Test
-    public void shouldThrowUserServiceExceptionWhenUserNotFoundHessian() throws Exception {
-        thrown.expect(UserServiceException.class);
-        userService.get(123L);
 
     }
 
     @Test
     public void shouldGetAllUsersJson() throws Exception {
-        ResponseEntity<String> responseEntity = restCaller.queryApi(HttpMethod.GET, "/remoting/api/users");
+        ResponseEntity<String> responseEntity = restCaller.queryApi(HttpMethod.GET, "/users");
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isNotNull();
         ReadContext context = JsonPath.parse(responseEntity.getBody());
@@ -101,7 +69,7 @@ public class UserServiceApplicationTest {
 
     @Test
     public void shouldGetUserJson() throws Exception {
-        ResponseEntity<String> responseEntity = restCaller.queryApi(HttpMethod.GET, "/remoting/api/user/1");
+        ResponseEntity<String> responseEntity = restCaller.queryApi(HttpMethod.GET, "/user/1");
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isNotNull();
         ReadContext context = JsonPath.parse(responseEntity.getBody());
@@ -110,7 +78,7 @@ public class UserServiceApplicationTest {
 
     @Test
     public void shouldGetBadRequestOnNonExistingUser() throws Exception {
-        ResponseEntity<String> responseEntity = restCaller.queryApi(HttpMethod.GET, "/remoting/api/user/123");
+        ResponseEntity<String> responseEntity = restCaller.queryApi(HttpMethod.GET, "/user/123");
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 
     }

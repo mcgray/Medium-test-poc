@@ -54,7 +54,7 @@ public class ToDoServiceImplTest {
         toDoShareAccount.setId(TODOSHARE_ACCOUNT_ID);
         user.setToDoShareAccount(toDoShareAccount);
         final ToDoShareAccountDto toDoShareAccountDto = new ToDoShareAccountDto(toDoShareAccount);
-        when(accountService.getByUserId(USER_ID)).thenReturn(toDoShareAccountDto);
+        when(accountService.getAccountByUserId(USER_ID)).thenReturn(toDoShareAccountDto);
         ToDo toDo1 = new ToDo();
         toDo1.setId(1L);
         toDo1.setTitle("Title1");
@@ -73,7 +73,7 @@ public class ToDoServiceImplTest {
 
     @Test
     public void shouldThrowExceptionWhenThereIsNoAccount() throws Exception {
-        when(accountService.getByUserId(USER_ID)).thenThrow(AccountServiceException.class);
+        when(accountService.getAccountByUserId(USER_ID)).thenThrow(AccountServiceException.class);
 
         thrown.expect(ToDoServiceException.class);
         thrown.expectCause(instanceOf(AccountServiceException.class));

@@ -16,7 +16,7 @@ import ua.com.mcgray.repository.ToDoShareAccountRepository;
  * @since 07.02.15
  */
 
-@Service
+@Service("localAccountService")
 public class AccountServiceImpl implements AccountService {
 
     private static Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
@@ -28,7 +28,7 @@ public class AccountServiceImpl implements AccountService {
     private ToDoShareAccountRepository toDoShareAccountRepository;
 
     @Override
-    public ToDoShareAccountDto getByUserId(final Long userId) throws AccountServiceException {
+    public ToDoShareAccountDto getAccountByUserId(final Long userId) throws AccountServiceException {
         if (userId == null) {
             String msg = "UserId cannot be null";
             logger.error(msg);

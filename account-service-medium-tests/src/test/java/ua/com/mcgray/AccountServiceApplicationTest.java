@@ -1,6 +1,7 @@
 package ua.com.mcgray;
 
-import com.caucho.hessian.client.HessianProxyFactory;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.ReadContext;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,15 +15,18 @@ import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ua.com.mcgray.domain.ToDoShareAccount;
-import ua.com.mcgray.domain.ToDoShareAccountDto;
 import ua.com.mcgray.domain.User;
 import ua.com.mcgray.dto.UserDto;
-import ua.com.mcgray.service.AccountService;
+import ua.com.mcgray.exception.UserServiceException;
 import ua.com.mcgray.service.UserService;
 import ua.com.mcgray.test.EmbeddedMysqlProvider;
 import ua.com.mcgray.test.MediumTest;
+import ua.com.mcgray.utils.RestCaller;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -49,6 +53,7 @@ public class AccountServiceApplicationTest {
     }
 
     public static final long USER_ID = 1L;
+    public static final long FAKE_USER_ID = 234L;
     public static final long TODOSHARE_ACCOUNT_ID = 2L;
 
     @Rule
@@ -60,16 +65,14 @@ public class AccountServiceApplicationTest {
     @Value("${local.server.port}")
     private int port;
 
-    private AccountService accountService;
-
     @Autowired
     private UserService userService;
 
+    private RestCaller restCaller;
+
     @Before
     public void setUp() throws Exception {
-        HessianProxyFactory hessianProxyFactory = new HessianProxyFactory();
-        accountService = (AccountService) hessianProxyFactory.create(AccountService.class,
-                "http://localhost:" + port + contextPath + "/remoting/AccountService");
+        restCaller = new RestCaller(port, contextPath);
 
     }
 
@@ -82,8 +85,20 @@ public class AccountServiceApplicationTest {
         user.setToDoShareAccount(toDoShareAccount1);
         final UserDto userDto = new UserDto(user);
         when(userService.get(USER_ID)).thenReturn(userDto);
-        ToDoShareAccountDto toDoShareAccount = accountService.getByUserId(USER_ID);
-        assertThat(toDoShareAccount).isNotNull();
+        ResponseEntity<String> responseEntity = restCaller.queryApi(HttpMethod.GET, "/account/" + String.valueOf(USER_ID));
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isNotNull();
+        ReadContext context = JsonPath.parse(responseEntity.getBody());
+        assertThat((Integer) context.read("$.id")).isEqualTo(Long.valueOf(TODOSHARE_ACCOUNT_ID).intValue());
+    }
+
+
+    @Test
+    public void shouldGetBadRequestOnNonExistingUser() throws Exception {
+        when(userService.get(FAKE_USER_ID)).thenThrow(new UserServiceException());
+        ResponseEntity<String> responseEntity = restCaller.queryApi(HttpMethod.GET, "/account/" + String.valueOf(FAKE_USER_ID));
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+
     }
 
     @Configuration
